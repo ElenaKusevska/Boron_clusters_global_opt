@@ -258,7 +258,7 @@ allocate (work(1,3))
 !    write(2,*) work(1,1)
 !    close (2)
 !
-lwork = work(1,1)
+lwork1 = work(1,1)
 deallocate (work)
 !
 !    open (unit=3, file='lwork', status='old', action='read')
@@ -378,7 +378,7 @@ deallocate(mola, molb, molc)
 !
 write(*,*) 'leave center_and_main_inertia_tensor...'
 !
-end subroutine center_and_main_inertia_tensor
+end subroutine center_and_main_inertia_vector
 !
 !----------------------------------------------------------------------
 !This subroutine rotates a molecule around z - axis by an angle 
@@ -392,7 +392,7 @@ integer, parameter :: dp = SELECTED_REAL_KIND(15)
 real(dp), allocatable, dimension(:,:), intent(in) :: moly
 real(dp), allocatable, dimension(:,:) :: coords3, rotated
 real(dp), dimension(3,3) :: Rz ! rotation axis
-integer(kind=16), intent(in) :: n4 !dimension of molecule
+integer, intent(in) :: n4 !dimension of molecule
 integer, intent(in) :: r !order of rotation axis
 real(dp), allocatable, dimension(:,:), intent(out) :: molz
 real(dp), parameter :: pi = 3.141592653589793
@@ -506,7 +506,7 @@ real(dp), dimension(3) :: vecxz !rotation around x-axis to
                     !to the xz plane
 real(dp), dimension(3) :: vecz ! the vector is aligned
                     !with z - axis after rotation around y - axis
-integer(kind=16), intent(in) :: n5 !number of atoms in the molecule
+integer, intent(in) :: n5 !number of atoms in the molecule
 real(dp), allocatable, dimension(:,:), intent(in) :: mol1 !input molecule
 real(dp), allocatable, dimension(:,:) :: coords5, rotated1, rotated2
                     !working functions
@@ -687,7 +687,7 @@ integer, parameter :: dp = SELECTED_REAL_KIND(15)
 real(dp), allocatable, dimension(:), intent(in) :: mass8
 real(dp), allocatable, dimension(:,:), intent(in) :: coords8
 real(dp), allocatable, dimension(:,:) :: mold, mole
-integer(kind=16), intent(in) :: n8, c8
+integer, intent(in) :: n8, c8
 integer :: i, j, k
 character(len=1), intent(out) :: logic8
 character(len=3) :: file8
@@ -754,7 +754,7 @@ implicit none
 integer, parameter :: dp = SELECTED_REAL_KIND(15)
 !
 integer :: i, j
-integer(kind=16), intent(in) :: natoms7
+integer, intent(in) :: natoms7
 real(dp), allocatable, dimension(:,:), intent(in) :: matrix1, matrix2
 integer, allocatable, dimension (:) :: comparison, B, BB ! comparison array
 integer, intent(out) :: prod ! for the product for the comparison
@@ -778,15 +778,13 @@ do i = 1, natoms7
    do j = 1, natoms7
       if (j == B(j)) cycle
       if (i == BB(i)) cycle
-      if ( matrix1(i,1) - matrix2(j,1) .LE. 0.001 ) then
-         if (abs(matrix1(i,2) - matrix2(j,2)) .LE. 0.015) then
-            if (abs(matrix1(i,3) - matrix2(j,3)) .LE. 0.015) then
-               if (abs(matrix1(i,4) - matrix2(j,4)) .LE. 0.015) then
-                  comparison(i) = 1
-                  B(j) = j
-                  BB(i) = i
-                  exit
-               end if
+      if (dabs(matrix1(i,1) - matrix2(j,1)) .LE. 0.0001 ) then
+         if (dabs(matrix1(i,2) - matrix2(j,2)) .LE. 0.0015) then
+            if (dabs(matrix1(i,3) - matrix2(j,3)) .LE. 0.0015) then
+               comparison(i) = 1
+               B(j) = j
+               BB(i) = i
+               exit
             end if
          end if
       end if
@@ -802,6 +800,7 @@ do i = 1, natoms7
     prod = prod * comparison(i)
 end do 
 write(*,*) 'prod', prod
+write(*,*) 'comparison', comparison
 write(*,*) 'leave compare...'
 !
 deallocate(comparison, B, BB)
@@ -817,7 +816,7 @@ implicit none
 integer, parameter :: dp = SELECTED_REAL_KIND(15)
 !
 real(dp), allocatable, dimension(:,:), intent(in) :: b_matrix
-integer(kind=16), intent(in) :: b_atoms !number of atoms
+integer, intent(in) :: b_atoms !number of atoms
 real(dp), allocatable, dimension(:,:) :: distance_m
 integer :: i, k, j, l, h, f, prod1
 integer, allocatable, dimension(:) :: equivalent, A, B, C
