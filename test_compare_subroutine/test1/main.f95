@@ -10,6 +10,7 @@ integer :: i, j, n
 n = 20
 allocate( matrix(n,3), masa(n) )
 
+! Add points that make the shape of a ge
 do i = 1, 10
    matrix(i,1) = i
    matrix(i,2) = 0
