@@ -2,6 +2,16 @@
 !------------------------------------------------------------------
 ! Program to test if my concept for checking that two structures 
 ! are equal works properly.
+!
+! Works by generating two equal geometric shapes as points 
+! (sets of coordinates on a grid), but located at different 
+! positions on the grid. If it works correctly, after
+! aligning with the main rotation axis with the z-axis, 
+! and moving the center of mass to (0,0,0) 
+! for both structures, both sets of points should
+! have the same set of coordinates, and a comparison routine
+! should find that for every point in structure 1, there is
+! a point with equal coordinates in structure 2.
 !------------------------------------------------------------------
 
 program abcd
@@ -15,6 +25,13 @@ integer :: i, j, n, test_variable
 
 n = 20
 allocate( matrixa(n,3), matrixb(n,3), mass(n) )
+
+! The points are hydrogen atoms (needed for some of the
+! subrutines that are called). The same mass array is used for matrixa
+! and matrixb
+do i = 1, n
+   mass(i) = 1.0
+end do
 
 ! Define the coordinates of points on the grid. You can see the shape
 ! when the files are printed. It's kinda like an L:
@@ -36,13 +53,6 @@ do i = 1, 5
    matrixa(15+i,3) = 0
 end do
 
-! Make these points be hydrogen atoms (needed for some of the
-! subrutines that are called). This array will be used for matrixa and
-! recycled/reused for matrixb:
-do i = 1, n
-   mass(i) = 1.0
-end do
-
 ! Print the .xyz file of these "hydrogen" points on the grid:
 open(unit=1, file='file1-1.xyz', action='write', status='replace')
 write(1,'(A2)') '20'
@@ -52,7 +62,8 @@ do i = 1, 20
 end do
 close(1)
 
-! Move then so that the center of mass is at (0,0,0):
+! Move them so that the main rotation axis is aligned with the
+! z-axis axis and the center of mass is at (0,0,0):
 call center_and_main_inertia_vector (mass,n,matrixa)
 
 ! And print the new coordinates:
@@ -94,7 +105,8 @@ do i = 1, 20
 end do
 close(3)
 
-! And move them so that the center of mass is at (0,0,0):
+! And move them so that the center of mass is at (0,0,0)
+! and the main rotation axis is aligned with the z-axis:
 call center_and_main_inertia_vector (mass,n,matrixb)
 
 ! And write the new, translated coordinates to a file:

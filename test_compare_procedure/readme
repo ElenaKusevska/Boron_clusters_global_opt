@@ -1,0 +1,3 @@
+compile as:
+
+gfortran main.f95 test_mod.f95 aux_mod.f95 -llapack -lblas
