@@ -12,7 +12,6 @@
 
 x=B5V
 mkdir SCF_Done
-mkdir SCF_Done
 mkdir not_finished
 for i in {1..15}
 do
