@@ -6,12 +6,12 @@ contains
 !Subroutine CPU:
 !------------------------------------------------------------------
 
-subroutine CPU(start, m, steps, A, method)
+subroutine CPU(start, m, steps, Av, method)
 implicit none
 
 real(kind=8), intent(in) :: start
 integer, intent(in) :: m, steps
-real, allocatable, dimension(:), intent(in) :: A
+real, allocatable, dimension(:), intent(in) :: Av
 character(len=*), intent(in) :: method
 real(kind=8) :: finish, time
 integer :: b
@@ -24,12 +24,12 @@ time = finish - start
 
 open(unit=2, file='CPU_time.txt', status='old', action='write', &
    position='append')
-write(2,*) 'method: ', metehod, 'steps:', steps
+write(2,*) 'method: ', method, 'steps:', steps
 write(2,*) 'CPU TIME:', time
 write(2,*)
 close(2)
 
-if (v .gt. 999999999) then !because of a limitation in the way that
+if (m .gt. 999999999) then !because of a limitation in the way that
 !                          the format is defined (b must contain a single
 !                          digit, i.e. b <= 10
    write(*,*) 'sorry, matrix is too large'
@@ -44,7 +44,7 @@ write(c,'(A4I1A3)') '(A1I', b, 'A5)' ! c = '(A1I2A5)'
 write(format1, c) '(', m, 'F7.3)' ! 'format1 = '(24F7.3)------------'
 format1 = trim(format1) ! '(24F7.3)'
 
-write(*,format) A
+write(*,format1) Av
 
 end subroutine CPU
 
@@ -57,10 +57,10 @@ implicit none
 
 integer, intent(in) :: n1
 real(kind=8), allocatable, dimension(:), intent(inout) :: numbers1
-integer :: i, j, test
+integer :: i, j, k, test
 real(kind=8) :: start1, a, b
 
-call cpu_time(start1)
+!call cpu_time(start1)
 
 open(unit=3, file='bubble.txt', status='replace', action='write')
 
@@ -78,7 +78,7 @@ do while (test == 0)
    write(3,'(10000F7.2)') (numbers1(i), i = 1, n1)
    write(3,*) '---------------------------------------------------'
    test = 1 !maybe this time they will all be ordered
-   do i = 1, n-k
+   do i = 1, n1-k
       if ( numbers1(i) .lt. numbers1(i+1) ) then !A(4) < A5
          a = numbers1(i)
          b = numbers1(i+1)
@@ -92,7 +92,7 @@ end do
 
 close(3)
 
-call CPU(start1)
+!call CPU(start1)
 
 end subroutine bubble_sort
 

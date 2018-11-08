@@ -20,6 +20,6 @@ end do
 
 call bubble_sort(n, A1)
 
-call first_and_last(n, A2)
+!call first_and_last(n, A2)
 
 end program sorting
