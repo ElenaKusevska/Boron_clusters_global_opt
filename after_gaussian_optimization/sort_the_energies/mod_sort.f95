@@ -1,7 +1,7 @@
 module sorting_subroutines
 implicit none
 contains
-!
+
 subroutine CPU(start1)
 implicit none
 integer, parameter :: dp = SELECTED_REAL_KIND(15)
@@ -18,15 +18,15 @@ end subroutine CPU
 subroutine bubble_sort(jobs2, energies2, njobs2)
 implicit none
 integer, parameter :: dp = SELECTED_REAL_KIND(15)
-!
+
 integer, allocatable, dimension(:), intent(inout) :: jobs2
 real(dp), allocatable, dimension(:), intent(inout) :: energies2
 integer, intent(in) :: njobs2
 integer :: i, test, x, y, j
 real(dp) :: start2, a, b
-!
+
 call cpu_time(start2)
-!
+
 test = 0
 j = 1
 do while (test .eq. 0)
@@ -52,19 +52,19 @@ do while (test .eq. 0)
    end do
    j = j + 1
 end do     
-!
+
 open(unit=30, file='bubble.txt', status='replace', action='write')
-!
+
 write(30,*) 'pass-bubble', j
 write(30,*)
 do i = 1, njobs2
    write(30, *) 'energy', energies2(i), 'job_order', jobs2(i)
 end do
-!
+
 close(30)
-!
+
 call CPU(start2)
-!
+
 end subroutine bubble_sort
 
 subroutine first_and_last(jobs3, energies3, njobs3)
@@ -78,22 +78,22 @@ real(dp), allocatable, dimension(:) :: work
 integer, dimension(1) :: k
 integer :: dim_work,  x, y, i, j
 real(dp) :: start3, a, b
-!
+
 call cpu_time(start3)
-!
+
 i = 0
 dim_work = njobs3
-!
+
 do while (dim_work .gt. 1)
    allocate ( work(dim_work) )
    do j = 1, dim_work
       work(j) = energies3(i + j)
    end do
-   !
+   
    !---------------------
    !maxima:
    !--------------------
-   !
+   
    k = maxloc(work)
    write(3,*) 'k-max', k
    !
@@ -115,11 +115,11 @@ do while (dim_work .gt. 1)
    y = jobs3(i + 1)
    jobs3(i + 1) = x
    jobs3(i + k(1)) = y
-   !
+   
    !--------------------
    !minima:
    !---------------------
-   !
+   
    k = minloc(work)
    write(3,*) 'k-min', k
    !
@@ -136,7 +136,7 @@ do while (dim_work .gt. 1)
    y = jobs3(i + dim_work)
    jobs3(i + dim_work) = x
    jobs3(i + k(1)) = y
-   !
+   
    deallocate(work)
    write(3,*)
    write(3,*) 'pass-first-and-last', i
@@ -149,19 +149,19 @@ do while (dim_work .gt. 1)
    i = i + 1
    write(*,*) 'i', i
 end do
-!
+
 open(unit=40, file='half-and-half.txt', status='replace', action='write')
-!
+
 write(40,*) 'pass-first-and-last', i
 write(40,*)
 do j = 1, njobs3
    write(40, *) 'energy', energies3(j), 'job_order', jobs3(j)
 end do
-!
+
 close(40)
-!
+
 call CPU(start3)
-!
+
 end subroutine first_and_last
-!
+
 end module sorting_subroutines
