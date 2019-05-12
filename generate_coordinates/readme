@@ -1,0 +1,3 @@
+three different variations on the program to generate the coordinates.
+
+Compile as: gfortran gen_main.f95 gen_mod.f95 global_mod.f95 aux_mod.f95 -llapack -lblas
